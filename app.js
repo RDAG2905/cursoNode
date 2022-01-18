@@ -6,7 +6,6 @@ const app = express()
 const port = 8080
 
     let contenedor = new model('productos.txt')
-    //contenedor.deleteAll()
     contenedor.save({
         "title": "Escuadra",
         "price": 123.45,
@@ -28,29 +27,31 @@ const port = 8080
       
     
 
-
-const server = app.listen(port,()=>{
-    console.log(`Servidor escuchando en el puerto ${server.address().port}`)
-})
-server.on("error",error => console.log(`Error en servidor : ${error}`))
-
-
 app.get('/',(req,res) => res.send(`Hola Mundo`))
 
 app.get('/productos',(req,res)=>
 {
-    contenedor.getAll().then(productos => res.send(JSON.parse(productos)))
-    contenedor.getAll().catch(error => res.send(error))
+    contenedor.getAll()
+              .then(productos => res.send(JSON.parse(productos)))
+              .catch(error => res.send(error))
 } )
 
 
 app.get('/productosRandom',(req,res)=>
 {
-    contenedor.getAll().then(products => {
-        let productos = JSON.parse(products)
-        let cantidad = productos.length  
-        let selected = Math.floor(Math.random() * cantidad)
-        let unProducto = productos[selected] 
-        res.send(unProducto)})
-    contenedor.getAll().catch(error => res.send(error))
+    contenedor.getAll()
+              .then(products => {
+                  let productos = JSON.parse(products)
+                  let cantidad = productos.length  
+                  let selected = Math.floor(Math.random() * cantidad)
+                  let unProducto = productos[selected] 
+                  res.send(unProducto)})
+              .catch(error => res.send(error))
 })
+
+
+
+const server = app.listen(port,()=>{
+  console.log(`Servidor escuchando en el puerto ${server.address().port}`)
+})
+server.on("error",error => console.log(`Error en servidor : ${error}`))
